@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FlyControls } from "three/addons/controls/FlyControls.js";
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -16,12 +17,21 @@ scene.add( cube );
 
 camera.position.z = 5;
 
+// 2. Initiate FlyControls with various params
+const controls = new FlyControls( camera, renderer.domElement );
+controls.movementSpeed = 100;
+controls.rollSpeed = Math.PI / 24;
+controls.autoForward = false;
+controls.dragToLook = true;
+
 function animate() {
 
 	cube.rotation.x += 0.01;
 	cube.rotation.y += 0.01;
 
+    
 	renderer.render( scene, camera );
+    controls.update(0.01)
 
 }
 
@@ -35,4 +45,10 @@ window.addEventListener('resize', () => {
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
+  });
+
+  // Example: Update target position on mouse click
+container.addEventListener('click', (event) => {
+    targetAzimuthalAngle = (event.clientX / window.innerWidth) * Math.PI * 2; // Example
+    targetPolarAngle = (event.clientY / window.innerHeight) * Math.PI; // Example
   });
