@@ -77,8 +77,8 @@ function init() {
 		new THREE.BoxGeometry( 100, 100, 100 ),
 		new THREE.MeshBasicMaterial( { color: 0xffff00, map: bricks} )
 	);
-	mesh3.position.z = 700;
-    mesh3.position.y = 350;
+	mesh3.position.z = 150;
+    mesh3.position.y = 150;
     mesh.add(mesh3);
 
 
@@ -156,6 +156,9 @@ function onKeyDown( event ) {
 
 // In your JavaScript file
 const fovInput = document.getElementById('fov-input');
+const nearInput = document.getElementById('near-input');
+const farInput = document.getElementById('far-input');
+
 
 fovInput.addEventListener('change', () => {
   const newFov = parseFloat(fovInput.value);
@@ -163,6 +166,18 @@ fovInput.addEventListener('change', () => {
   cameraPerspective.updateProjectionMatrix();
   console.log("new fov" + newFov);
 });
+
+nearInput.addEventListener('change', () => {
+    const newNear = parseFloat(nearInput.value);
+    cameraPerspective.near = newNear;
+    cameraPerspective.updateProjectionMatrix();
+  });
+  
+  farInput.addEventListener('change', () => {
+    const newFar = parseFloat(farInput.value);
+    cameraPerspective.far = newFar;
+    cameraPerspective.updateProjectionMatrix();
+  });
 
 //
 

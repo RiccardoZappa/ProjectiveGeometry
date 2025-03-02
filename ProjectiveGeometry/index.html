@@ -15,7 +15,11 @@
 		<div id="info"><a target="_blank" rel="noopener"></a>cameras<br/>
 		<b>O</b> orthographic <b>P</b> perspective
 		</div>
-        <input type="number" id="fov-input" value="50">
+        <div>
+            FOV: <input type="number" id="fov-input" value="50">
+            Near Plane: <input type="number" id="near-input" value="150">
+            Far Plane: <input type="number" id="far-input" value="1000">
+        </div>
 		<script type="importmap">
 			{
 				"imports": {
@@ -25,6 +29,5 @@
 			}
 		</script>
 		<script type="module" src="javascript/script.js"></script>
-
 	</body>
 </html>
