@@ -1,97 +1,231 @@
 import * as THREE from 'three';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+import Stats from 'three/addons/libs/stats.module.js';
 
-// Scene and Renderer
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeeeeee);
+let SCREEN_WIDTH = window.innerWidth;
+let SCREEN_HEIGHT = window.innerHeight;
+let aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
 
-const container = document.getElementById('three-container');
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(600, 450);
-container.appendChild(renderer.domElement);
+let container, stats;
+let camera, scene, renderer, mesh;
+let cameraRig, activeCamera, activeHelper;
+let cameraPerspective, cameraOrtho;
+let cameraPerspectiveHelper, cameraOrthoHelper;
+const frustumSize = 600;
 
-// Cameras
-const mainCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-mainCamera.position.set(0, 10, 20);
+init();
 
-const overviewCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-overviewCamera.position.set(30, 30, 30);
-overviewCamera.lookAt(scene.position);
+function init() {
 
-// Add Light
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 10, 10);
-scene.add(light);
+	container = document.createElement( 'div' );
+	document.body.appendChild( container );
 
-// Create Large Cube (Wireframe for better visualization)
-const cubeGeometry = new THREE.BoxGeometry(3, 3, 3);
-const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-scene.add(cube);
+	scene = new THREE.Scene();
 
-// Create Projection Lines
-const projectionLines = [];
-const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+	//
 
-for (let i = 0; i < 8; i++) {
-    const line = new THREE.Line(new THREE.BufferGeometry(), lineMaterial);
-    scene.add(line);
-    projectionLines.push(line);
+	camera = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 1, 10000 );
+	camera.position.z = 2500;
+
+	cameraPerspective = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 150, 1000 );
+
+	cameraPerspectiveHelper = new THREE.CameraHelper( cameraPerspective );
+	scene.add( cameraPerspectiveHelper );
+
+	//
+	cameraOrtho = new THREE.OrthographicCamera( 0.5 * frustumSize * aspect / - 2, 0.5 * frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 150, 1000 );
+
+	cameraOrthoHelper = new THREE.CameraHelper( cameraOrtho );
+	scene.add( cameraOrthoHelper );
+
+	//
+
+	activeCamera = cameraPerspective;
+	activeHelper = cameraPerspectiveHelper;
+
+
+	// counteract different front orientation of cameras vs rig
+
+	cameraOrtho.rotation.y = Math.PI;
+	cameraPerspective.rotation.y = Math.PI;
+
+	cameraRig = new THREE.Group();
+
+	cameraRig.add( cameraPerspective );
+	cameraRig.add( cameraOrtho );
+
+	scene.add( cameraRig );
+	//
+
+	mesh = new THREE.Mesh(
+		new THREE.SphereGeometry( 100, 16, 8 ),
+		new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } )
+	);
+	scene.add( mesh );
+
+	const mesh2 = new THREE.Mesh(
+		new THREE.SphereGeometry( 50, 16, 8 ),
+		new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } )
+	);
+	mesh2.position.y = 150;
+	mesh.add( mesh2 );
+
+	const mesh3 = new THREE.Mesh(
+		new THREE.SphereGeometry( 5, 16, 8 ),
+		new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } )
+	);
+	mesh3.position.z = 150;
+	cameraRig.add( mesh3 );
+
+	//
+
+	const geometry = new THREE.BufferGeometry();
+	const vertices = [];
+
+	for ( let i = 0; i < 10000; i ++ ) {
+
+		vertices.push( THREE.MathUtils.randFloatSpread( 2000 ) ); // x
+		vertices.push( THREE.MathUtils.randFloatSpread( 2000 ) ); // y
+		vertices.push( THREE.MathUtils.randFloatSpread( 2000 ) ); // z
+
+	}
+
+	geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+
+	const particles = new THREE.Points( geometry, new THREE.PointsMaterial( { color: 0x888888 } ) );
+	scene.add( particles );
+
+	//
+
+	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+	renderer.setAnimationLoop( animate );
+	container.appendChild( renderer.domElement );
+
+	renderer.setScissorTest( true );
+
+	//
+
+	stats = new Stats();
+	container.appendChild( stats.dom );
+
+	//
+
+	window.addEventListener( 'resize', onWindowResize );
+	document.addEventListener( 'keydown', onKeyDown );
+
 }
 
-// Function to Update Projection Lines
-function updateProjectionLines() {
-    const vertices = cubeGeometry.attributes.position;
-    const cubeWorldMatrix = cube.matrixWorld;
+//
 
-    for (let i = 0; i < 8; i++) {
-        const vertex = new THREE.Vector3().fromBufferAttribute(vertices, i);
-        vertex.applyMatrix4(cubeWorldMatrix); // Convert local to world position
+function onKeyDown( event ) {
 
-        const points = [vertex, mainCamera.position.clone()];
-        projectionLines[i].geometry.setFromPoints(points);
-    }
+	switch ( event.keyCode ) {
+
+		case 79: /*O*/
+
+			activeCamera = cameraOrtho;
+			activeHelper = cameraOrthoHelper;
+
+			break;
+
+		case 80: /*P*/
+
+			activeCamera = cameraPerspective;
+			activeHelper = cameraPerspectiveHelper;
+
+			break;
+
+	}
+
 }
 
-// GUI for Switching Camera Views
-const gui = new GUI();
-const cameraParams = { cameraView: 'Main Camera' };
+//
 
-gui.add(cameraParams, 'cameraView', ['Main Camera', 'Overview Camera']).onChange(() => {
-    if (cameraParams.cameraView === 'Main Camera') {
-        currentCamera = mainCamera;
-    } else {
-        currentCamera = overviewCamera;
-    }
-});
+function onWindowResize() {
 
-// Animation Loop
-let currentCamera = mainCamera;
+	SCREEN_WIDTH = window.innerWidth;
+	SCREEN_HEIGHT = window.innerHeight;
+	aspect = SCREEN_WIDTH / SCREEN_HEIGHT;
+
+	renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+
+	camera.aspect = 0.5 * aspect;
+	camera.updateProjectionMatrix();
+
+	cameraPerspective.aspect = 0.5 * aspect;
+	cameraPerspective.updateProjectionMatrix();
+
+	cameraOrtho.left = - 0.5 * frustumSize * aspect / 2;
+	cameraOrtho.right = 0.5 * frustumSize * aspect / 2;
+	cameraOrtho.top = frustumSize / 2;
+	cameraOrtho.bottom = - frustumSize / 2;
+	cameraOrtho.updateProjectionMatrix();
+
+}
+
+//
 
 function animate() {
-    requestAnimationFrame(animate);
 
-    // Rotate the Cube
-    cube.rotation.x += 0.005;
-    cube.rotation.y += 0.005;
+	render();
+	stats.update();
 
-    // Update Projection Lines
-    updateProjectionLines();
-
-    renderer.render(scene, currentCamera);
 }
 
-animate();
 
-// Handle Resizing
-window.addEventListener('resize', () => {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+function render() {
 
-    mainCamera.aspect = width / height;
-    overviewCamera.aspect = width / height;
-    mainCamera.updateProjectionMatrix();
-    overviewCamera.updateProjectionMatrix();
+	const r = Date.now() * 0.0005;
 
-    renderer.setSize(width, height);
-});
+	mesh.position.x = 700 * Math.cos( r );
+	mesh.position.z = 700 * Math.sin( r );
+	mesh.position.y = 700 * Math.sin( r );
+
+	mesh.children[ 0 ].position.x = 70 * Math.cos( 2 * r );
+	mesh.children[ 0 ].position.z = 70 * Math.sin( r );
+
+	if ( activeCamera === cameraPerspective ) {
+
+		cameraPerspective.fov = 35 + 30 * Math.sin( 0.5 * r );
+		cameraPerspective.far = mesh.position.length();
+		cameraPerspective.updateProjectionMatrix();
+
+		cameraPerspectiveHelper.update();
+		cameraPerspectiveHelper.visible = true;
+
+		cameraOrthoHelper.visible = false;
+
+	} else {
+
+		cameraOrtho.far = mesh.position.length();
+		cameraOrtho.updateProjectionMatrix();
+
+		cameraOrthoHelper.update();
+		cameraOrthoHelper.visible = true;
+
+		cameraPerspectiveHelper.visible = false;
+
+	}
+
+	cameraRig.lookAt( mesh.position );
+
+	//
+
+	activeHelper.visible = false;
+
+	renderer.setClearColor( 0x000000, 1 );
+	renderer.setScissor( 0, 0, SCREEN_WIDTH / 2, SCREEN_HEIGHT );
+	renderer.setViewport( 0, 0, SCREEN_WIDTH / 2, SCREEN_HEIGHT );
+	renderer.render( scene, activeCamera );
+
+	//
+
+	activeHelper.visible = true;
+
+	renderer.setClearColor( 0x111111, 1 );
+	renderer.setScissor( SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2, SCREEN_HEIGHT );
+	renderer.setViewport( SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2, SCREEN_HEIGHT );
+	renderer.render( scene, camera );
+
+}
