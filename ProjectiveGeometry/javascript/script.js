@@ -26,7 +26,7 @@ function init() {
 	camera = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 1, 10000 );
 	camera.position.z = 2500;
 
-	cameraPerspective = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 150, 1000 );
+	cameraPerspective = new THREE.PerspectiveCamera( 50, 0.5 * aspect, 300, 1000 );
 
 	cameraPerspectiveHelper = new THREE.CameraHelper( cameraPerspective );
 	scene.add( cameraPerspectiveHelper );
@@ -56,25 +56,40 @@ function init() {
 	scene.add( cameraRig );
 	//
 
+    //texture
+    const textureLoader = new THREE.TextureLoader();
+    const bricks = textureLoader.load('assets/bricks.jpg');
+
 	mesh = new THREE.Mesh(
 		new THREE.SphereGeometry( 100, 16, 8 ),
-		new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true } )
+		new THREE.MeshBasicMaterial({ color: 0xf08080, map: bricks})
 	);
 	scene.add( mesh );
 
 	const mesh2 = new THREE.Mesh(
 		new THREE.SphereGeometry( 50, 16, 8 ),
-		new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } )
+		new THREE.MeshBasicMaterial( { color: 0x00ff00, map: bricks} )
 	);
 	mesh2.position.y = 150;
 	mesh.add( mesh2 );
 
 	const mesh3 = new THREE.Mesh(
-		new THREE.SphereGeometry( 5, 16, 8 ),
-		new THREE.MeshBasicMaterial( { color: 0x0000ff, wireframe: true } )
+		new THREE.BoxGeometry( 100, 100, 100 ),
+		new THREE.MeshBasicMaterial( { color: 0xffff00, map: bricks} )
 	);
-	mesh3.position.z = 150;
-	cameraRig.add( mesh3 );
+	mesh3.position.z = 700;
+    mesh3.position.y = 350;
+    mesh.add(mesh3);
+
+
+    const points = [];
+    for ( let i = 0; i < 10; i ++ ) {
+	    points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 10 + 5, ( i - 5 ) * 2 ) );   
+    }
+    const geometry_lathe = new THREE.LatheGeometry( points );
+    const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    const lathe = new THREE.Mesh( geometry_lathe, material );
+    scene.add( lathe );
 
 	//
 
@@ -106,10 +121,8 @@ function init() {
 
 	//
 
-	stats = new Stats();
-	container.appendChild( stats.dom );
-
-	//
+    const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    scene.add( light );
 
 	window.addEventListener( 'resize', onWindowResize );
 	document.addEventListener( 'keydown', onKeyDown );
@@ -140,6 +153,17 @@ function onKeyDown( event ) {
 
 }
 
+
+// In your JavaScript file
+const fovInput = document.getElementById('fov-input');
+
+fovInput.addEventListener('change', () => {
+  const newFov = parseFloat(fovInput.value);
+  cameraPerspective.fov = newFov;
+  cameraPerspective.updateProjectionMatrix();
+  console.log("new fov" + newFov);
+});
+
 //
 
 function onWindowResize() {
@@ -169,7 +193,6 @@ function onWindowResize() {
 function animate() {
 
 	render();
-	stats.update();
 
 }
 
@@ -187,7 +210,7 @@ function render() {
 
 	if ( activeCamera === cameraPerspective ) {
 
-		cameraPerspective.fov = 35 + 30 * Math.sin( 0.5 * r );
+		cameraPerspective.fov = 800;
 		cameraPerspective.far = mesh.position.length();
 		cameraPerspective.updateProjectionMatrix();
 
