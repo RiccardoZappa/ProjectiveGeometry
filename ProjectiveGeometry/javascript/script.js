@@ -225,8 +225,6 @@ function render() {
 
 	if ( activeCamera === cameraPerspective ) {
 
-		cameraPerspective.fov = 800;
-		cameraPerspective.far = mesh.position.length();
 		cameraPerspective.updateProjectionMatrix();
 
 		cameraPerspectiveHelper.update();
@@ -236,7 +234,6 @@ function render() {
 
 	} else {
 
-		cameraOrtho.far = mesh.position.length();
 		cameraOrtho.updateProjectionMatrix();
 
 		cameraOrthoHelper.update();
