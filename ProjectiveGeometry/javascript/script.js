@@ -71,26 +71,35 @@ function init() {
 		new THREE.MeshBasicMaterial( { color: 0x00ff00, map: bricks} )
 	);
 	mesh2.position.y = 150;
+    mesh.position.z = 100;
 	mesh.add( mesh2 );
 
 	const mesh3 = new THREE.Mesh(
 		new THREE.BoxGeometry( 100, 100, 100 ),
 		new THREE.MeshBasicMaterial( { color: 0xffff00, map: bricks} )
 	);
-	mesh3.position.z = 150;
+	mesh3.position.z = 350;
     mesh3.position.y = 150;
     mesh.add(mesh3);
 
+    const mesh4 = new THREE.Mesh(
+		new THREE.CapsuleGeometry( 50, 30, 4, 8 ),
+		new THREE.MeshBasicMaterial( {color: 0xff0000, map: bricks} )
+	);
+    mesh4.position.z = 200;
+    mesh4.position.y = 300;
+    mesh4.position.z = 300;
+    mesh.add(mesh4);
 
-    const points = [];
-    for ( let i = 0; i < 10; i ++ ) {
-	    points.push( new THREE.Vector2( Math.sin( i * 0.2 ) * 10 + 5, ( i - 5 ) * 2 ) );   
-    }
-    const geometry_lathe = new THREE.LatheGeometry( points );
-    const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-    const lathe = new THREE.Mesh( geometry_lathe, material );
-    scene.add( lathe );
 
+    const mesh5 = new THREE.Mesh(
+		new THREE.BoxGeometry( 100, 100, 100 ),
+		new THREE.MeshBasicMaterial( { color: 0x0000ff, map: bricks} )
+	);
+	mesh5.position.z = 500;
+    mesh5.position.y = 10;
+    mesh5.position.x = 300;
+    mesh.add(mesh5);
 	//
 
 	const geometry = new THREE.BufferGeometry();
@@ -162,21 +171,21 @@ const farInput = document.getElementById('far-input');
 
 fovInput.addEventListener('change', () => {
   const newFov = parseFloat(fovInput.value);
-  cameraPerspective.fov = newFov;
-  cameraPerspective.updateProjectionMatrix();
+  activeCamera.fov = newFov;
+  activeCamera.updateProjectionMatrix();
   console.log("new fov" + newFov);
 });
 
 nearInput.addEventListener('change', () => {
     const newNear = parseFloat(nearInput.value);
-    cameraPerspective.near = newNear;
-    cameraPerspective.updateProjectionMatrix();
+    activeCamera.near = newNear;
+    activeCamera.updateProjectionMatrix();
   });
   
   farInput.addEventListener('change', () => {
     const newFar = parseFloat(farInput.value);
-    cameraPerspective.far = newFar;
-    cameraPerspective.updateProjectionMatrix();
+    activeCamera.far = newFar;
+    activeCamera.updateProjectionMatrix();
   });
 
 //
