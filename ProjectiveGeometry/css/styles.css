@@ -13,6 +13,10 @@ a {
 	text-decoration: none;
 }
 
+b {
+    color: lightgreen;
+}
+
 a:hover {
 	text-decoration: underline;
 }
@@ -88,4 +92,14 @@ a, button, input, select {
 	background-color: #f00;
 	margin-top: 20px;
 	padding: 10px;
+}
+
+#controls {
+    position: absolute;
+    top: 40px; /* Position below the #info div */
+    left: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
 }
