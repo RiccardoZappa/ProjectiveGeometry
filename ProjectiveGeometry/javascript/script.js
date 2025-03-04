@@ -10,6 +10,7 @@ let cameraRig, activeCamera, activeHelper;
 let cameraPerspective, cameraOrtho;
 let cameraPerspectiveHelper, cameraOrthoHelper;
 const frustumSize = 600;
+let lastAddedMesh = null; // Add this line
 
 const gui = new dat.GUI();
 
@@ -154,91 +155,103 @@ function init() {
         texture: 'bricks'
     };
 
-     // dat.GUI folders
-     const objectFolder = gui.addFolder('New Object');
-     objectFolder.add(params, 'type', ['Sphere', 'Box', 'Capsule']); // Dropdown for object type
-     const sizeFolder = objectFolder.addFolder('Size');
-     const positionFolder = objectFolder.addFolder('Position');
-     const materialFolder = objectFolder.addFolder('Material');
+    // dat.GUI folders
+    const objectFolder = gui.addFolder('New Object');
+    const typeController = objectFolder.add(params, 'type', ['Sphere', 'Box', 'Capsule']); // Dropdown for object type
+    const sizeFolder = objectFolder.addFolder('Size');
+    const positionFolder = objectFolder.addFolder('Position');
+    const materialFolder = objectFolder.addFolder('Material');
  
-     // Size controls (conditional based on 'type')
-     const sizeControllers = [];
+    // Size controls (conditional based on 'type')
+    const sizeControllers = [];
  
-     function updateSizeControls() {
-         sizeControllers.forEach(controller => sizeFolder.remove(controller));
-         sizeControllers.length = 0;  // Clear the array
+    function updateSizeControls() {
+        sizeControllers.forEach(controller => sizeFolder.remove(controller));
+        sizeControllers.length = 0;  // Clear the array
  
-         if (params.type === 'Sphere') {
-             sizeControllers.push(sizeFolder.add(params, 'radius', 1, 200));
-             sizeControllers.push(sizeFolder.add(params, 'segments', 4, 64, 1));
-         } else if (params.type === 'Box') {
-             sizeControllers.push(sizeFolder.add(params, 'width', 1, 200));
-             sizeControllers.push(sizeFolder.add(params, 'height', 1, 200));
-             sizeControllers.push(sizeFolder.add(params, 'depth', 1, 200));
-         } else if (params.type === 'Capsule') {
-             sizeControllers.push(sizeFolder.add(params, 'radius', 1, 200));
-             sizeControllers.push(sizeFolder.add(params, 'capsuleLength', 1, 200));
-             sizeControllers.push(sizeFolder.add(params, 'segments', 4, 64, 1));
-             sizeControllers.push(sizeFolder.add(params, 'capSegments', 2, 32, 1));
+        if (params.type === 'Sphere') {
+            sizeControllers.push(sizeFolder.add(params, 'radius', 1, 200));
+            sizeControllers.push(sizeFolder.add(params, 'segments', 4, 64, 1));
+        } else if (params.type === 'Box') {
+            sizeControllers.push(sizeFolder.add(params, 'width', 1, 200));
+            sizeControllers.push(sizeFolder.add(params, 'height', 1, 200));
+            sizeControllers.push(sizeFolder.add(params, 'depth', 1, 200));
+        } else if (params.type === 'Capsule') {
+            sizeControllers.push(sizeFolder.add(params, 'radius', 1, 200));
+            sizeControllers.push(sizeFolder.add(params, 'capsuleLength', 1, 200));
+            sizeControllers.push(sizeFolder.add(params, 'segments', 4, 64, 1));
+            sizeControllers.push(sizeFolder.add(params, 'capSegments', 2, 32, 1));
  
-         }
-     }
-      objectFolder.add(params, 'add');
+        }
+    }
+    objectFolder.add(params, 'add');
+
+    params.deleteLast = deleteLastObject;
+    objectFolder.add(params, 'deleteLast').name('Delete Last');
+
  
-     // Update size controls whenever the object type changes
-     objectFolder.onChange(updateSizeControls);
-     updateSizeControls(); // Initial setup
+    // Update size controls whenever the object type changes
+    typeController.onChange(updateSizeControls);
+    updateSizeControls(); // Initial setup
  
-     // Position controls
-     positionFolder.add(params, 'x', -500, 500);
-     positionFolder.add(params, 'y', -500, 500);
-     positionFolder.add(params, 'z', -500, 500);
+    // Position controls
+    positionFolder.add(params, 'x', -500, 500);
+    positionFolder.add(params, 'y', -500, 500);
+    positionFolder.add(params, 'z', -500, 500);
  
-     // Material controls
-     materialFolder.addColor(params, 'color');
-     materialFolder.add(params, 'texture', ['bricks', 'none']);
+    // Material controls
+    materialFolder.addColor(params, 'color');
+    materialFolder.add(params, 'texture', ['bricks', 'none']);
      
  
-     // Camera controls
-     const cameraFolder = gui.addFolder('Camera');
-     cameraFolder.add(cameraPerspective, 'fov', 1, 179).name('FOV').onChange(() => {
-         cameraPerspective.updateProjectionMatrix();
-         cameraPerspectiveHelper.update();
-     });
- 
-     cameraFolder.add(cameraPerspective, 'near', 0.1, 500).name('Near').onChange(() => {
+    // Camera controls
+    const cameraFolder = gui.addFolder('Camera');
+    cameraFolder.add(cameraPerspective, 'fov', 1, 150).name('FOV').onChange(() => {
         cameraPerspective.updateProjectionMatrix();
-         cameraPerspectiveHelper.update();
-     });
-     cameraFolder.add(cameraPerspective, 'far', 1, 5000).name('Far').onChange(() => {
-         cameraPerspective.updateProjectionMatrix();
-         cameraPerspectiveHelper.update();
-     });
+        cameraPerspectiveHelper.update();
+    });
+ 
+    cameraFolder.add(cameraPerspective, 'near', 0.1, 500).name('Near').onChange(() => {
+        cameraPerspective.updateProjectionMatrix();
+        cameraPerspectiveHelper.update();
+    });
+    cameraFolder.add(cameraPerspective, 'far', 1, 5000).name('Far').onChange(() => {
+        cameraPerspective.updateProjectionMatrix();
+        cameraPerspectiveHelper.update();
+    });
  
  
  
-     // Add object function
-     function addObject() {
-         let geometry;
-         if (params.type === 'Sphere') {
-             geometry = new THREE.SphereGeometry(params.radius, params.segments, params.segments);
-         } else if (params.type === 'Box') {
-             geometry = new THREE.BoxGeometry(params.width, params.height, params.depth);
-         } else if (params.type === 'Capsule') {
-             geometry = new THREE.CapsuleGeometry(params.radius, params.capsuleLength, params.segments, params.capSegments);
-         }
-         let material
-         if(params.texture == 'bricks') {
-             material = new THREE.MeshBasicMaterial({ color: params.color, map: bricks });
-         } else {
-             material = new THREE.MeshBasicMaterial({ color: params.color });
-         }
+    // Add object function
+    function addObject() {
+        let geometry;
+        if (params.type === 'Sphere') {
+            geometry = new THREE.SphereGeometry(params.radius, params.segments, params.segments);
+        } else if (params.type === 'Box') {
+            geometry = new THREE.BoxGeometry(params.width, params.height, params.depth);
+        } else if (params.type === 'Capsule') {
+            geometry = new THREE.CapsuleGeometry(params.radius, params.capsuleLength, params.segments, params.capSegments);
+        }
+        let material
+        if(params.texture == 'bricks') {
+            material = new THREE.MeshBasicMaterial({ color: params.color, map: bricks });
+        } else {
+            material = new THREE.MeshBasicMaterial({ color: params.color });
+        }
  
-         const newMesh = new THREE.Mesh(geometry, material);
-         newMesh.position.set(params.x, params.y, params.z);
-         scene.add(newMesh);
-     }
- 
+        const newMesh = new THREE.Mesh(geometry, material);
+        newMesh.position.set(params.x, params.y, params.z);
+        scene.add(newMesh);
+        lastAddedMesh = newMesh; // Store the new meshs
+    }
+    function deleteLastObject() {
+        if (lastAddedMesh) {
+            scene.remove(lastAddedMesh); // Remove from the scene
+            lastAddedMesh.geometry.dispose(); // Dispose of the geometry
+            lastAddedMesh.material.dispose(); // Dispose of the material
+            lastAddedMesh = null; // Clear the reference
+        }
+    }
 
 	window.addEventListener( 'resize', onWindowResize );
 	document.addEventListener( 'keydown', onKeyDown );
