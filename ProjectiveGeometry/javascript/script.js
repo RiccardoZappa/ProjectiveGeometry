@@ -322,33 +322,6 @@ function onKeyDown( event ) {
 
 }
 
-
-// In your JavaScript file
-const fovInput = document.getElementById('fov-input');
-const nearInput = document.getElementById('near-input');
-const farInput = document.getElementById('far-input');
-
-fovInput.addEventListener('change', () => {
-  const newFov = parseFloat(fovInput.value);
-  activeCamera.fov = newFov;
-  activeCamera.updateProjectionMatrix();
-  console.log("new fov" + newFov);
-});
-
-nearInput.addEventListener('change', () => {
-    const newNear = parseFloat(nearInput.value);
-    activeCamera.near = newNear;
-    activeCamera.updateProjectionMatrix();
-  });
-  
-  farInput.addEventListener('change', () => {
-    const newFar = parseFloat(farInput.value);
-    activeCamera.far = newFar;
-    activeCamera.updateProjectionMatrix();
-  });
-
-//
-
 function onWindowResize() {
 
 	SCREEN_WIDTH = window.innerWidth;
