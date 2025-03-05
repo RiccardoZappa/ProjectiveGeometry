@@ -27,13 +27,3 @@ b {
 	pointer-events: none;
 	z-index: 1; /* TODO Solve this in HTML */
 }
-
-#controls {
-    position: absolute;
-    top: 40px; /* Position below the #info div */
-    left: 10px;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 1;
-}
