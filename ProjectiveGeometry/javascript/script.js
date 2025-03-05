@@ -11,6 +11,7 @@ let cameraPerspective, cameraOrtho;
 let cameraPerspectiveHelper, cameraOrthoHelper;
 const frustumSize = 600;
 let lastAddedMesh = null; // Add this line
+const addedMeshes = []; // Array to store added meshes
 
 const gui = new dat.GUI();
 
@@ -67,42 +68,6 @@ function init() {
 		new THREE.MeshBasicMaterial({ color: 0xf08080, map: bricks})
 	);
 	scene.add( mesh );
-
-	const mesh2 = new THREE.Mesh(
-		new THREE.SphereGeometry( 50, 16, 8 ),
-		new THREE.MeshBasicMaterial( { color: 0x00ff00, map: bricks} )
-	);
-	mesh2.position.y = 150;
-    mesh.position.z = 100;
-	mesh.add( mesh2 );
-
-	const mesh3 = new THREE.Mesh(
-		new THREE.BoxGeometry( 100, 100, 100 ),
-		new THREE.MeshBasicMaterial( { color: 0xffff00, map: bricks} )
-	);
-	mesh3.position.z = 350;
-    mesh3.position.y = 150;
-    mesh.add(mesh3);
-
-    const mesh4 = new THREE.Mesh(
-		new THREE.CapsuleGeometry( 50, 30, 4, 8 ),
-		new THREE.MeshBasicMaterial( {color: 0xff0000, map: bricks} )
-	);
-    mesh4.position.z = 200;
-    mesh4.position.y = 300;
-    mesh4.position.z = 300;
-    mesh.add(mesh4);
-
-
-    const mesh5 = new THREE.Mesh(
-		new THREE.BoxGeometry( 100, 100, 100 ),
-		new THREE.MeshBasicMaterial( { color: 0x0000ff, map: bricks} )
-	);
-	mesh5.position.z = 500;
-    mesh5.position.y = 10;
-    mesh5.position.x = 300;
-    mesh.add(mesh5);
-	//
 
 	const geometry = new THREE.BufferGeometry();
 	const vertices = [];
@@ -360,9 +325,12 @@ function render() {
 	mesh.position.x = 700 * Math.cos( r );
 	mesh.position.z = 700 * Math.sin( r );
 	mesh.position.y = 700 * Math.sin( r );
-
-	mesh.children[ 0 ].position.x = 70 * Math.cos( 2 * r );
-	mesh.children[ 0 ].position.z = 70 * Math.sin( r );
+    
+    if (mesh.children.length != 0)
+    {
+        mesh.children[ 0 ].position.x = 70 * Math.cos( 2 * r );
+        mesh.children[ 0 ].position.z = 70 * Math.sin( r );
+    }
 
 	if ( activeCamera === cameraPerspective ) {
 

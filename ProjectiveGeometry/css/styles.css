@@ -15,15 +15,40 @@ b {
 
 #info {
 	position: absolute;
-	top: 0px;
+	top: 10px; /* Adjust as needed */
+	left: 50%;  /* Center horizontally */
+	transform: translateX(-50%); /* Fine-tune centering */
+	color: white;
+	z-index: 2; /* Ensure info is above dat.gui and canvas */
+	text-align: center; /* Center the text within #info */
+}
+ #navigation {
+	margin-bottom: 5px; /* Space between links and O/P text */
+}
+
+#navigation a {
+	color: lightblue;
+	text-decoration: none; /* Remove underlines */
+	margin: 0 10px; /* Spacing between links */
+}
+#navigation a:hover {
+	text-decoration: underline;
+}
+
+
+#canvas-container {
+	position: absolute; /* Or relative, depending on your layout */
+	top: 0;
+	left: 0;
 	width: 100%;
-	padding: 10px;
-	box-sizing: border-box;
-	text-align: center;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	pointer-events: none;
-	z-index: 1; /* TODO Solve this in HTML */
+	height: 100%;
+	z-index: 1; /* Below #info, but potentially above dat.gui (if needed) */
+}
+/* dat.GUI styles (overriding defaults) */
+.dg.ac { /* This targets the main dat.GUI container */
+	background-color: #333333 !important;
+	position: absolute !important; /* Override default fixed positioning */
+	top: 0 !important;
+	left: 0 !important;
+	z-index: 2 !important; /* Ensure it's above the canvas*/
 }
