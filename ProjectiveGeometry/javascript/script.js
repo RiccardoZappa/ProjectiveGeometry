@@ -220,8 +220,6 @@ function init() {
         cameraPerspectiveHelper.update();
     });
  
- 
- 
     // Add object function
     function addObject() {
         let geometry;
@@ -241,12 +239,13 @@ function init() {
  
         const newMesh = new THREE.Mesh(geometry, material);
         newMesh.position.set(params.x, params.y, params.z);
-        scene.add(newMesh);
+        mesh.add(newMesh);
         lastAddedMesh = newMesh; // Store the new meshs
     }
+
     function deleteLastObject() {
         if (lastAddedMesh) {
-            scene.remove(lastAddedMesh); // Remove from the scene
+            mesh.remove(lastAddedMesh); // Remove from the scene
             lastAddedMesh.geometry.dispose(); // Dispose of the geometry
             lastAddedMesh.material.dispose(); // Dispose of the material
             lastAddedMesh = null; // Clear the reference
