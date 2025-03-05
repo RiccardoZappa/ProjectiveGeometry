@@ -206,19 +206,12 @@ function init() {
  
     // Camera controls
     const cameraFolder = gui.addFolder('Camera');
-    cameraFolder.add(cameraPerspective, 'fov', 1, 150).name('FOV').onChange(() => {
-        cameraPerspective.updateProjectionMatrix();
-        cameraPerspectiveHelper.update();
-    });
+    
+    cameraFolder.add(cameraPerspective, 'fov', 1, 150).name('FOV').onChange(updateFov);
  
-    cameraFolder.add(cameraPerspective, 'near', 0.1, 500).name('Near').onChange(() => {
-        cameraPerspective.updateProjectionMatrix();
-        cameraPerspectiveHelper.update();
-    });
-    cameraFolder.add(cameraPerspective, 'far', 1, 5000).name('Far').onChange(() => {
-        cameraPerspective.updateProjectionMatrix();
-        cameraPerspectiveHelper.update();
-    });
+    cameraFolder.add(cameraPerspective, 'near', 0.1, 500).name('Near').onChange(updateNear);
+    
+    cameraFolder.add(cameraPerspective, 'far', 1, 5000).name('Far').onChange(updateFar);
  
     // Add object function
     function addObject() {
@@ -252,6 +245,44 @@ function init() {
         }
     }
 
+    function updateCamera() {
+        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+        {
+            activeCamera.updateProjectionMatrix();
+            if(activeHelper)
+            {
+                activeHelper.update();
+            }
+        }
+    }
+
+    function updateFov()
+    {
+        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+        {
+            activeCamera.fov = cameraPerspective.fov;
+        }
+        updateCamera();
+    }
+
+    function updateNear()
+    {
+        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+        {
+            activeCamera.near = cameraPerspective.near;
+        }
+        updateCamera();
+    }
+
+    function updateFar()
+    {
+        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+        {
+            activeCamera.far = cameraPerspective.far;
+        }
+        updateCamera();
+    }
+
 	window.addEventListener( 'resize', onWindowResize );
 	document.addEventListener( 'keydown', onKeyDown );
 
@@ -278,6 +309,16 @@ function onKeyDown( event ) {
 			break;
 
 	}
+    // Ensure that when camera changes the gui is updated
+    updateFov();
+    updateNear();
+    updateFar();
+
+    if(gui) {
+        for (var i in gui.__controllers) {
+            gui.__controllers[i].updateDisplay();
+        }
+    }
 
 }
 
@@ -286,7 +327,6 @@ function onKeyDown( event ) {
 const fovInput = document.getElementById('fov-input');
 const nearInput = document.getElementById('near-input');
 const farInput = document.getElementById('far-input');
-
 
 fovInput.addEventListener('change', () => {
   const newFov = parseFloat(fovInput.value);
