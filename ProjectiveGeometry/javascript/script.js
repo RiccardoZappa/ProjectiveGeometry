@@ -153,6 +153,8 @@ function init() {
 
     params.deleteLast = deleteLastObject;
     objectFolder.add(params, 'deleteLast').name('Delete Last');
+    params.deleteAll = deleteAllObjects; // Add the new function to params
+    objectFolder.add(params, 'deleteAll').name('Delete All');
 
  
     // Update size controls whenever the object type changes
@@ -199,6 +201,7 @@ function init() {
         newMesh.position.set(params.x, params.y, params.z);
         mesh.add(newMesh);
         lastAddedMesh = newMesh; // Store the new meshs
+        addedMeshes.push(newMesh);
     }
 
     function deleteLastObject() {
@@ -208,6 +211,15 @@ function init() {
             lastAddedMesh.material.dispose(); // Dispose of the material
             lastAddedMesh = null; // Clear the reference
         }
+    }
+
+    function deleteAllObjects() {
+        for (const mesh_ of addedMeshes) {
+            mesh.remove(mesh_);
+            mesh_.geometry.dispose();
+            mesh_.material.dispose();
+        }
+        addedMeshes.length = 0; // Clear the array
     }
 
     function updateCamera() {
@@ -325,7 +337,7 @@ function render() {
 	mesh.position.x = 700 * Math.cos( r );
 	mesh.position.z = 700 * Math.sin( r );
 	mesh.position.y = 700 * Math.sin( r );
-    
+
     if (mesh.children.length != 0)
     {
         mesh.children[ 0 ].position.x = 70 * Math.cos( 2 * r );
