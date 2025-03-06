@@ -117,7 +117,10 @@ function init() {
         z: 0,
         color: '#ff0000', // Default color (red)
         add: addObject, // Function to add the object
-        texture: 'bricks'
+        texture: 'bricks',
+        cameraX: cameraRig.position.x, 
+        cameraY: cameraRig.position.y,
+        cameraZ: cameraRig.position.z
     };
 
     // dat.GUI folders
@@ -162,9 +165,9 @@ function init() {
     updateSizeControls(); // Initial setup
  
     // Position controls
-    positionFolder.add(params, 'x', -500, 500);
-    positionFolder.add(params, 'y', -500, 500);
-    positionFolder.add(params, 'z', -500, 500);
+    positionFolder.add(params, 'x', -1000, 1000);
+    positionFolder.add(params, 'y', -1000, 1000);
+    positionFolder.add(params, 'z', -1000, 1000);
  
     // Material controls
     materialFolder.addColor(params, 'color');
@@ -175,11 +178,17 @@ function init() {
     const cameraFolder = gui.addFolder('Camera');
     
     cameraFolder.add(cameraPerspective, 'fov', 1, 150).name('FOV').onChange(updateFov);
- 
     cameraFolder.add(cameraPerspective, 'near', 0.1, 500).name('Near').onChange(updateNear);
-    
     cameraFolder.add(cameraPerspective, 'far', 1, 5000).name('Far').onChange(updateFar);
- 
+    
+    cameraFolder.add(params, 'cameraX', -1000, 1000).name('Camera X').onChange(updateCameraPosition);
+    cameraFolder.add(params, 'cameraY', -1000, 1000).name('Camera Y').onChange(updateCameraPosition);
+    cameraFolder.add(params, 'cameraZ', -1000, 1000).name('Camera Z').onChange(updateCameraPosition);
+    
+    function updateCameraPosition() {
+        cameraRig.position.set(params.cameraX, params.cameraY, params.cameraZ);
+    }
+
     // Add object function
     function addObject() {
         let geometry;
@@ -285,11 +294,35 @@ function onKeyDown( event ) {
 
 			break;
 
+        // Add WASDQE controls:
+        case 87: // W: Forward
+            cameraRig.position.z -= moveDistance;
+            break;
+        case 83: // S: Backward
+            cameraRig.position.z += moveDistance;
+            break;
+        case 65: // A: Left
+            cameraRig.position.x -= moveDistance;
+            break;
+        case 68: // D: Right
+            cameraRig.position.x += moveDistance;
+            break;
+        case 81: // Q: Up
+            cameraRig.position.y += moveDistance;
+            break;
+        case 69: // E: Down
+            cameraRig.position.y -= moveDistance;
+            break;
+
 	}
     // Ensure that when camera changes the gui is updated
     updateFov();
     updateNear();
     updateFar();
+
+    params.cameraX = cameraRig.position.x;
+    params.cameraY = cameraRig.position.y;
+    params.cameraZ = cameraRig.position.z;
 
     if(gui) {
         for (var i in gui.__controllers) {
