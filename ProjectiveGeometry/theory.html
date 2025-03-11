@@ -1,16 +1,489 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>theory</title>
-        <link type="text/css" rel="stylesheet" href="css/styles.css">
-    </head>
-    <body>
-        <div id="info">
-            <div id="navigation">
-                <a href="index.html">Index</a>
-                <a href="instructions.html">Instructions</a>
-                <a href="project.html">Theory</a>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Teoria della Proiezione 3D</title>
+  <link rel="stylesheet" href="css/theory.css">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .formula {
+            margin-bottom: 1em;
+            /* Spazio tra le formule */
+/*            font-family: monospace;  Usa un font monospace per una migliore resa delle formule */
+            white-space: pre-wrap;     /* Preserva spazi bianchi e a capo */
+        }
+		.formula-block {
+		    margin-bottom: 1em;
+		    display: block; /* Important for LaTeX rendering to be on its own line */
+		}
+        .inline-formula {
+/*            font-family: monospace;*/
+        }
+        .sub {
+            vertical-align: sub;
+            font-size: smaller;
+        }
+		.sup {
+		    vertical-align: super;
+		    font-size: smaller;
+		}
+		.italic {
+			font-style: italic;
+		}
+        .breadcrumb {
+          background-color: transparent !important;
+        }
+    </style>
+     <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']] ,
+        displayMath: [['$$','$$'], ['\\[','\\]']],
+
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">Nome del Tuo Progetto</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>          </li>          <li class="nav-item">            <a class="nav-link" href="manual.html">Manuale</a>          </li>          <li class="nav-item">            <a class="nav-link" href="app.html">Applet</a>          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h1 class="mt-4 mb-3">Geometria Proiettiva e Rendering 3D: La Camera e la Proiezione</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.html">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Teoria</li>
+      </ol>
+
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card h-100">
+          <h4 class="card-header">1. Rappresentazione di Oggetti 3D e Trasformazioni</h4>
+          <div class="card-body">
+
+            <p><b>Coordinate Omogenee:</b></p>
+            <p>Per rappresentare punti nello spazio proiettivo (che include punti all'infinito), usiamo le coordinate omogenee.  Questo ci permette di rappresentare traslazioni, rotazioni, scaling *e* proiezioni prospettiche tramite moltiplicazioni di matrici.</p>
+            <ul>
+              <li>Un punto 3D Euclideo <span class="inline-formula">(x, y, z)</span> diventa <span class="inline-formula">(x, y, z, 1)</span> in coordinate omogenee.</li>
+              <li><span class="inline-formula">(x, y, z, w)</span> è equivalente a <span class="inline-formula">(kx, ky, kz, kw)</span> per qualsiasi <span class="inline-formula">k &ne; 0</span>.</li>
+              <li>Conversione in coordinate Euclidee: <span class="inline-formula">(x, y, z, w) &rarr; (x/w, y/w, z/w)</span>  (se <span class="inline-formula">w &ne; 0</span>).</li>
+              <li>Punti all'Infinito: <span class="inline-formula">(x, y, z, 0)</span>.</li>
+            </ul>
+
+            <p><b>Matrici di Trasformazione 3D (4x4):</b></p>
+            <p>Le trasformazioni (traslazione, rotazione, scaling) sono rappresentate da matrici 4x4 che operano su coordinate omogenee.</p>
+
+            <p><b>Forma Generale:</b></p>
+            <div class="formula-block">
+                $$
+                \begin{bmatrix}
+                  a_{00} & a_{01} & a_{02} & a_{03} \\
+                  a_{10} & a_{11} & a_{12} & a_{13} \\
+                  a_{20} & a_{21} & a_{22} & a_{23} \\
+                  a_{30} & a_{31} & a_{32} & a_{33}
+                \end{bmatrix}
+                $$
             </div>
+
+             <p><b>Applicazione della Trasformazione:</b></p>
+             <div class="formula-block">
+                $$
+                \begin{bmatrix}
+                x' \\
+                y' \\
+                z' \\
+                w'
+                \end{bmatrix}
+                =
+                \begin{bmatrix}
+                  a_{00} & a_{01} & a_{02} & a_{03} \\
+                  a_{10} & a_{11} & a_{12} & a_{13} \\
+                  a_{20} & a_{21} & a_{22} & a_{23} \\
+                  a_{30} & a_{31} & a_{32} & a_{33}
+                \end{bmatrix}
+                \begin{bmatrix}
+                x \\
+                y \\
+                z \\
+                w
+                \end{bmatrix}
+                $$
+            </div>
+
+            <p><b>Traslazione:</b></p>
+             <div class="formula-block">
+              $$
+              \begin{bmatrix}
+                1 & 0 & 0 & t_x \\
+                0 & 1 & 0 & t_y \\
+                0 & 0 & 1 & t_z \\
+                0 & 0 & 0 & 1
+              \end{bmatrix}
+              $$
+            </div>
+
+            <p><b>Rotazione (attorno all'asse z di un angolo θ):</b></p>
+            <div class="formula-block">
+            $$
+              \begin{bmatrix}
+                \cos(\theta) & -\sin(\theta) & 0 & 0 \\
+                \sin(\theta) &  \cos(\theta) & 0 & 0 \\
+                0 & 0 & 1 & 0 \\
+                0 & 0 & 0 & 1
+              \end{bmatrix}
+            $$
+            </div>
+
+            <p><b>Scaling:</b></p>
+             <div class="formula-block">
+             $$
+              \begin{bmatrix}
+                s_x & 0 & 0 & 0 \\
+                0 & s_y & 0 & 0 \\
+                0 & 0 & s_z & 0 \\
+                0 & 0 & 0 & 1
+              \end{bmatrix}
+              $$
+            </div>
+
+            <p><b>Combinazione di Trasformazioni:</b> Moltiplicare le matrici in ordine *inverso* rispetto all'applicazione (T * R per rotazione e poi traslazione).</p>
+            <p class = "card-text">
+              <b>Immagine:</b> Mostra un cubo 3D e un secondo cubo che è stato trasformato (traslato, ruotato e scalato).  Mostra le matrici di trasformazione accanto alle frecce che indicano le trasformazioni.
+            </p>
+          </div>
         </div>
-    </body>
+
+
+        <div class="card h-100 mt-4">
+          <h4 class="card-header">2. Il Modello di Camera: Parametri Intrinseci ed Estrinseci</h4>
+          <div class="card-body">
+            <p>Il modello di camera descrive matematicamente il processo di proiezione di punti 3D dalla scena al piano immagine 2D.  Si compone di due parti principali: parametri intrinseci ed estrinseci.</p>
+
+            <p><b>Sistemi di Coordinate:</b></p>
+            <ul>
+              <li><b>Coordinate del Mondo (X<sub class="sub">w</sub>, Y<sub class="sub">w</sub>, Z<sub class="sub">w</sub>):</b>  Sistema di riferimento globale per la scena.</li>
+              <li><b>Coordinate della Camera (X<sub class="sub">c</sub>, Y<sub class="sub">c</sub>, Z<sub class="sub">c</sub>):</b> Sistema di riferimento centrato sulla camera, con l'asse Z<sub class="sub">c</sub> che punta lungo la direzione di vista.</li>
+              <li><b>Coordinate dell'Immagine (u, v):</b>  Coordinate 2D (in pixel) sul piano immagine.</li>
+            </ul>
+
+            <p><b>Parametri Estrinseci:</b> Definiscono la *posizione* e l'*orientamento* della camera rispetto al sistema di coordinate del mondo.</p>
+            <ul>
+                <li><b>Matrice di Rotazione (R):</b> Una matrice 3x3 che descrive la rotazione della camera.</li>
+                <li><b>Vettore di Traslazione (t):</b> Un vettore 3x1 che descrive la posizione del centro della camera (in coordinate del mondo).</li>
+            </ul>
+
+            <p><b>Trasformazione da Coordinate del Mondo a Coordinate della Camera:</b></p>
+             <div class="formula-block">
+              $$ P_c = R P_w + t $$
+             </div>
+            <p>Dove <span class="inline-formula">P<sub class="sub">w</sub> = [X<sub class="sub">w</sub>, Y<sub class="sub">w</sub>, Z<sub class="sub">w</sub>]<sup>T</sup></span> è un punto in coordinate del mondo, e <span class="inline-formula">P<sub class="sub">c</sub> = [X<sub class="sub">c</sub>, Y<sub class="sub">c</sub>, Z<sub class="sub">c</sub>]<sup>T</sup></span> è lo stesso punto in coordinate della camera.</p>
+
+            <p><b>Rappresentazione in Coordinate Omogenee:</b></p>
+            <p>Possiamo combinare rotazione e traslazione in un'unica matrice 4x4 (matrice di trasformazione *estrinseca*):</p>
+			<div class="formula-block">
+            $$
+            \begin{bmatrix}
+            X_c \\
+            Y_c \\
+            Z_c \\
+            1
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+            R & | & t \\
+            \hline
+            0 & & 1
+            \end{bmatrix}
+            \begin{bmatrix}
+            X_w \\
+            Y_w \\
+            Z_w \\
+            1
+            \end{bmatrix}
+            $$
+            </div>
+
+            <p><b>Parametri Intrinseci:</b> Definiscono le caratteristiche *interne* della camera, come la lunghezza focale e la posizione del punto principale.</p>
+			<p><b>Matrice dei Parametri Intrinseci (K):</b></p>
+			<div class="formula-block">
+              $$
+              K = \begin{bmatrix}
+                f_x & 0 & c_x \\
+                0 & f_y & c_y \\
+                0 & 0 & 1
+              \end{bmatrix}
+              $$
+            </div>
+            <ul>
+              <li><span class="inline-formula">f<sub class="sub">x</sub></span>, <span class="inline-formula">f<sub class="sub">y</sub></span>: Lunghezze focali in pixel (lungo gli assi u e v).  Sono legate al campo visivo (FOV).</li>
+              <li><span class="inline-formula">c<sub class="sub">x</sub></span>, <span class="inline-formula">c<sub class="sub">y</sub></span>: Coordinate (in pixel) del *punto principale*, che è idealmente il centro dell'immagine.</li>
+            </ul>
+
+            <p class="card-text"><b>Immagine:</b></p>
+                <ul>
+                    <li>Disegna una camera (scatola + foro).</li>
+                    <li>Mostra gli assi delle coordinate del mondo (Xw, Yw, Zw).</li>
+                    <li>Mostra gli assi delle coordinate della camera (Xc, Yc, Zc).</li>
+                    <li>Disegna il piano immagine, con assi (u, v).</li>
+                    <li>Mostra le distanze fx, fy, e il punto principale (cx, cy).</li>
+                </ul>
+
+
+            <p><b>Matrice di Proiezione Completa (P):</b></p>
+            <p>Combina parametri intrinseci ed estrinseci in un'unica matrice 3x4 (o 4x4 in forma omogenea):</p>
+			<div class="formula-block">
+            $$
+            P = K [ R | t ]
+            $$
+           </div>
+            <p><b>Equazione di Proiezione:</b></p>
+            <div class="formula-block">
+                $$
+                \begin{bmatrix}
+                    u' \\
+                    v' \\
+                    w'
+                \end{bmatrix}
+                =
+                P
+                \begin{bmatrix}
+                    X_w \\
+                    Y_w \\
+                    Z_w \\
+                    1
+                \end{bmatrix}
+                $$
+            </div>
+
+            <p>Dove <span class = "inline-formula">p<sub>i</sub> = (u', v', w')</span> sono le coordinate omogenee dell'immagine, e le coordinate pixel finali sono <span class="inline-formula">u = u'/w'</span> e <span class="inline-formula">v = v'/w'</span>.  Questa divisione per <span class="inline-formula">w'</span> è fondamentale per l'effetto prospettico.</p>
+          </div>
+        </div>
+
+        <div class="card h-100 mt-4">
+          <h4 class="card-header">3. Il Modello di Camera Pinhole</h4>
+          <div class="card-body">
+            <p>Il modello di camera pinhole (foro stenopeico) è una semplificazione del modello generale, ed è il modello *fondamentale* utilizzato in computer grafica e computer vision (e implementato da `THREE.PerspectiveCamera`).</p>
+
+            <p><b>Assunzioni:</b></p>
+            <ul>
+              <li>Nessuna lente (quindi nessuna distorsione).</li>
+              <li>Il foro è infinitamente piccolo (quindi nessuna sfocatura).</li>
+            </ul>
+            <p>Questo modello, pur essendo un'idealizzazione, è una buona approssimazione per molte camere reali, *specialmente* quando la profondità di campo è ampia e la distorsione della lente è minima.</p>
+
+            <p><b>Semplificazioni:</b></p>
+            <p>Nel modello pinhole, la matrice dei parametri intrinseci <span class="inline-formula">K</span> si semplifica:</p>
+
+            <div class="formula-block">
+              $$
+              K = \begin{bmatrix}
+                f & 0 & c_x \\
+                0 & f & c_y \\
+                0 & 0 & 1
+              \end{bmatrix}
+              $$
+            </div>
+            <p>Dove <span class="inline-formula">f = f<sub class="sub">x</sub> = f<sub class="sub">y</sub></span> è una singola lunghezza focale (in pixel).  Questo perché, nel modello pinhole ideale, non c'è distorsione e gli assi u e v del piano immagine sono ortogonali e hanno la stessa scala.</p>
+
+             <p><b>Matrice di Proiezione Pinhole (con camera allineata agli assi):</b></p>
+            <p>Se la camera è allineata con gli assi del mondo (R = matrice identità) e traslata di un vettore t, la matrice di proiezione P si semplifica a:</p>
+			<div class="formula-block">
+               $$
+               P =
+               \begin{bmatrix}
+                 f & 0 & c_x & -f*t_x \\
+                 0 & f & c_y & -f*t_y \\
+                 0 & 0 & 1 & -t_z
+               \end{bmatrix}
+               $$
+            </div>
+            <p>Spesso, per ulteriore semplicità, si assume che la camera sia all'origine (<span class="inline-formula">t = [0, 0, 0]</span>).  In questo caso, la matrice diventa:</p>
+            <div class="formula-block">
+             $$
+             P =
+             \begin{bmatrix}
+               f & 0 & c_x & 0 \\
+               0 & f & c_y & 0 \\
+               0 & 0 & 1 & 0
+             \end{bmatrix}
+             $$
+            </div>
+            <div class="card-body" style="text-align: center;"></div>
+                <img src="assets/CameraPin.png" alt="Pinhole Camera Model" width="500">
+            </div>
+           <p><b>Esempio Numerico (Camera all'Origine):</b></p>
+           <p>Consideriamo:</p>
+           <ul>
+               <li>Camera:
+                   <ul>
+                     <li><span class="inline-formula">f = 500</span> (lunghezza focale)</li>
+                     <li><span class="inline-formula">c<sub class="sub">x</sub> = 320</span>, <span class="inline-formula">c<sub class="sub">y</sub> = 240</span> (centro immagine)</li>
+                     <li><span class="inline-formula">R =</span> Matrice Identità (camera allineata agli assi del mondo)</li>
+                     <li><span class="inline-formula">t = [0, 0, 0]</span> (camera all'origine)</li>
+                 </ul>
+               </li>
+               <li>Punto 3D: <span class="inline-formula">P<sub class="sub">w</sub> = (1, 2, 5)</span> (in coordinate del mondo)</li>
+           </ul>
+
+         <p>1. Costruiamo la matrice <span class="inline-formula">K</span>:</p>
+         <div class="formula-block">
+           $$
+           K = \begin{bmatrix}
+             500 & 0 & 320 \\
+             0 & 500 & 240 \\
+             0 & 0 & 1
+           \end{bmatrix}
+           $$
+         </div>
+
+         <p>2. Poiché <span class="inline-formula">R</span> è la matrice identità e <span class="inline-formula">t = [0, 0, 0]</span>, la matrice <span class="inline-formula">[R | t]</span> è:</p>
+          <div class="formula-block">
+          $$
+           \begin{bmatrix}
+             1 & 0 & 0 & 0 \\
+             0 & 1 & 0 & 0 \\
+             0 & 0 & 1 & 0
+           \end{bmatrix}
+           $$
+          </div>
+
+         <p>3. La matrice di proiezione <span class="inline-formula">P</span> è quindi:</p>
+         <div class="formula-block">
+         $$
+         P = K [R|t] =
+         \begin{bmatrix}
+           500 & 0 & 320 & 0 \\
+           0 & 500 & 240 & 0 \\
+           0 & 0 & 1 & 0
+         \end{bmatrix}
+         $$
+         </div>
+           <p>4. Calcoliamo la proiezione del punto <span class="inline-formula">P<sub class = "sub">w</sub></span>:</p>
+           <div class="formula-block">
+           $$
+           p_i = P P_w =
+           \begin{bmatrix}
+             500 & 0 & 320 & 0 \\
+             0 & 500 & 240 & 0 \\
+             0 & 0 & 1 & 0
+           \end{bmatrix}
+           \begin{bmatrix}
+             1 \\
+             2 \\
+             5 \\
+             1
+           \end{bmatrix}
+           =
+           \begin{bmatrix}
+             500 + 0 + 1600 + 0 \\
+             0 + 1000 + 1200 + 0 \\
+             0 + 0 + 5 + 0
+           \end{bmatrix}
+           =
+           \begin{bmatrix}
+             2100 \\
+             2200 \\
+             5
+           \end{bmatrix}
+           $$
+           </div>
+
+           <p>5. Otteniamo le coordinate 2D (u, v) dividendo per la componente omogenea (w):</p>
+          <div class="formula">
+            u = 2100 / 5 = 420<br>
+            v = 2200 / 5 = 440
+          </div>
+           <p>Quindi, il punto 3D (1, 2, 5) viene proiettato nel punto 2D (420, 440) dell'immagine.</p>
+
+         <p class="card-text"><b>Immagine:</b></p>
+         <ul>
+           <li>Disegna una camera (rappresentata da un punto, il "foro stenopeico").</li>
+           <li>Disegna un punto 3D nello spazio.</li>
+           <li>Disegna una linea retta (il raggio di proiezione) che parte dal punto 3D, passa attraverso il foro stenopeico e interseca il piano immagine.</li>
+           <li>Etichetta la lunghezza focale (f) come la distanza tra il foro e il piano immagine.</li>
+           <li>Etichetta le coordinate (u, v) del punto proiettato sul piano immagine.</li>
+         </ul>
+       </div>
+     </div>
+
+     <div class="card h-100 mt-4">
+       <h4 class="card-header">4. Proiezione Ortografica</h4>
+       <div class="card-body">
+         <p>La proiezione ortografica è un tipo di proiezione *parallela*.  Non c'è un centro di proiezione singolo; tutti i raggi di proiezione sono paralleli tra loro e perpendicolari al piano immagine.  Questo significa che le dimensioni degli oggetti *non* cambiano con la distanza dalla camera.</p>
+
+         <p><b>Matrice di Proiezione Ortografica:</b></p>
+         <div class="formula-block">
+           $$
+           \begin{bmatrix}
+             \frac{2}{right - left} & 0 & 0 & -\frac{right + left}{right - left} \\
+             0 & \frac{2}{top - bottom} & 0 & -\frac{top + bottom}{top - bottom} \\
+             0 & 0 & \frac{-2}{far - near} & -\frac{far + near}{far - near} \\
+             0 & 0 & 0 & 1
+           \end{bmatrix}
+           $$
+         </div>
+         <p>Dove <span class="inline-formula">left</span>, <span class="inline-formula">right</span>, <span class="inline-formula">top</span>, <span class="inline-formula">bottom</span>, <span class="inline-formula">near</span> e <span class="inline-formula">far</span> definiscono i limiti del *volume di visualizzazione ortografico* (un parallelepipedo rettangolo).  Tutto ciò che si trova al di fuori di questo volume viene scartato (clipping).</p>
+
+         <p><b>Proiezione:</b></p>
+          <div class = "formula">
+            p<sub class = "sub">i</sub> = P * P<sub class = "sub">w</sub>
+          </div>
+
+         <p class="card-text"><b>Immagine:</b></p>
+           <ul>
+               <li>Disegna un parallelepipedo rettangolo che rappresenta il volume di visualizzazione.</li>
+               <li>Disegna un punto 3D all'interno del volume.</li>
+               <li>Disegna linee parallele dal punto, perpendicolari al piano di proiezione (che coincide con una delle facce del parallelepipedo), mostrando la proiezione ortografica.  Non c'è un singolo punto di convergenza.</li>
+           </ul>
+       </div>
+     </div>
+
+     <div class="card h-100 mt-4">
+           <h4 class="card-header">5. Rilevanza per Three.js</h4>
+           <div class="card-body">
+               <p>Three.js utilizza internamente questi concetti:</p>
+               <ul>
+                   <li><code>THREE.PerspectiveCamera</code>: Implementa il modello di camera pinhole.  I parametri <code>fov</code>, <code>aspect</code>, <code>near</code> e <code>far</code> definiscono la matrice di proiezione prospettica.</li>
+                   <li><code>THREE.OrthographicCamera</code>: Implementa la proiezione ortografica.  I parametri <code>left</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, <code>near</code> e <code>far</code> definiscono il volume di visualizzazione.</li>
+                   <li><code>camera.position</code>, <code>camera.rotation</code>: Controllano i parametri estrinseci (posizione e orientamento della camera).  Three.js utilizza internamente matrici 4x4 per rappresentare queste trasformazioni.</li>
+                   <li><code>camera.updateProjectionMatrix()</code>:  *Fondamentale*.  Deve essere chiamato ogni volta che si modificano i parametri della camera (<code>fov</code>, <code>aspect</code>, <code>near</code>, <code>far</code>, <code>left</code>, <code>right</code>, <code>top</code>, <code>bottom</code>) per ricalcolare la matrice di proiezione.</li>
+                   <li><code>Object3D.position</code>, <code>Object3D.rotation</code>, <code>Object3D.scale</code>: Permettono di applicare trasformazioni (traslazione, rotazione, scaling) agli oggetti 3D. Three.js gestisce internamente la moltiplicazione delle matrici.</li>
+               </ul>
+           </div>
+     </div>
+   </div>
+ </div>
+
+ <footer class="py-5 bg-dark">
+   <div class="container">
+     <p class="m-0 text-center text-white">Copyright &copy; Il Tuo Nome 2023</p>
+   </div>
+ </footer>
+
+ <script src="vendor/jquery/jquery.min.js"></script>
+ <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

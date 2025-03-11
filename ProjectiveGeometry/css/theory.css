@@ -1,0 +1,103 @@
+/* --- Generale --- */
+
+body {
+    padding-top: 56px; /* Spazio per la navbar fissa */
+    font-family: sans-serif; /* Font più leggibile */
+    background-color: #f8f9fa; /* Sfondo leggermente grigio (Bootstrap default) */
+  }
+  
+  .container {
+    max-width: 960px; /* Larghezza massima del contenuto */
+  }
+  
+  /* --- Titoli --- */
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #343a40; /* Colore scuro per i titoli (Bootstrap default) */
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  h1 {
+      font-size: 2.5rem; /* Dimensione del titolo principale */
+  }
+  
+  /* --- Breadcrumb --- */
+  .breadcrumb {
+      background-color: transparent !important;
+      padding: 0.75rem 0; /* Riduci il padding verticale */
+      font-size: 0.9rem;
+  }
+  
+  /* --- Card --- */
+  
+  .card {
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05); /* Ombra leggera */
+    border: none; /* Rimuovi il bordo di default */
+    margin-bottom: 1.5rem;
+  }
+  
+  .card-header {
+    background-color: #007bff; /* Colore primario di Bootstrap */
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* --- Formule --- */
+  
+  .formula {
+    margin-bottom: 1em;
+    white-space: pre-wrap;
+    /*font-family: 'Courier New', Courier, monospace; Font monospace */
+    background-color: #e9ecef; /* Sfondo leggermente grigio per le formule */
+    padding: 0.5em;
+    border-radius: 0.25rem;
+    overflow-x: auto; /* Scroll orizzontale se necessario */
+  }
+  
+  .formula-block {
+      margin-bottom: 1em;
+      display: block; /* Important for LaTeX rendering to be on its own line */
+  }
+  
+  
+  .inline-formula {
+    /*font-family: 'Courier New', Courier, monospace;  Font monospace */
+  }
+  
+  .sub {
+    vertical-align: sub;
+    font-size: smaller;
+  }
+  
+  .sup {
+    vertical-align: super;
+    font-size: smaller;
+  }
+  
+  .italic {
+      font-style: italic;
+  }
+  
+  /* --- Liste --- */
+  
+  ul {
+    padding-left: 1.5rem; /* Indentazione delle liste */
+  }
+  
+  /* --- Footer --- */
+  
+  footer {
+    background-color: #343a40 !important; /* Sfondo scuro per il footer (Bootstrap default) */
+  }
+  
+  footer p {
+    color: white;
+    margin-bottom: 0; /* Rimuovi il margin inferiore del paragrafo */
+  }
+  
+  /* --- Specifico per MathJax (opzionale, ma consigliato) --- */
+  /* Migliora l'aspetto delle formule renderizzate da MathJax */
+  mjx-container {
+      margin: 0.5em 0 !important; /* Aggiunge spazio sopra e sotto le formule */
+  }
