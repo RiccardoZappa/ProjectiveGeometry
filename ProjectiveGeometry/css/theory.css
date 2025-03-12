@@ -1,7 +1,6 @@
 /* --- Generale --- */
 
 body {
-    padding-top: 56px; /* Spazio per la navbar fissa */
     font-family: sans-serif; /* Font più leggibile */
     background-color: #f8f9fa; /* Sfondo leggermente grigio (Bootstrap default) */
   }
@@ -102,7 +101,7 @@ body {
       margin: 0.5em 0 !important; /* Aggiunge spazio sopra e sotto le formule */
   }
 
-    #topnav{
+  #topnav{
     overflow: hidden;
     background-color: #1f2eae;
     padding: 0px 0px;
