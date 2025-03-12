@@ -11,7 +11,7 @@ html{
   
   #topnav{
     overflow: hidden;
-    background-color: #902528;
+    background-color: #1f2eae;
     padding: 0px 0px;
   }
   
@@ -44,7 +44,7 @@ html{
     margin-bottom: 20px;
     text-align: center;
     font-size: 50px;
-    color: #902528;
+    color: #2e2590;
     font-weight: bold;
     align: center;
     text-shadow: 2px 2px 4px grey;

@@ -101,3 +101,40 @@ body {
   mjx-container {
       margin: 0.5em 0 !important; /* Aggiunge spazio sopra e sotto le formule */
   }
+
+    #topnav{
+    overflow: hidden;
+    background-color: #1f2eae;
+    padding: 0px 0px;
+  }
+  
+  #topnav_span{
+    display:table;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .topnav_el{
+    float: left;
+    font-size: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    padding: 24px 80px;
+  }
+  
+  .topnav_el:hover{
+    background-color: #771619;
+  }
+
+  header{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 50px;
+    color: #2e2590;
+    font-weight: bold;
+    align: center;
+    text-shadow: 2px 2px 4px grey;
+  }
+  
