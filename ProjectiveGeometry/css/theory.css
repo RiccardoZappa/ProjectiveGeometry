@@ -3,6 +3,7 @@
 body {
     font-family: sans-serif; /* Font più leggibile */
     background-color: #f8f9fa; /* Sfondo leggermente grigio (Bootstrap default) */
+    margin: 0;
   }
   
   .container {
