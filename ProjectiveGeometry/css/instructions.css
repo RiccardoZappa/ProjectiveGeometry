@@ -57,3 +57,19 @@ html{
   .row-container {display: flex; width: 100%; height: 100%; flex-direction: column; overflow: hidden;}
   .first-row { }
   .second-row { flex-grow: 1; border: none; margin: 0; padding: 0; }
+
+  .image-text-container {
+    display: flex; /* Abilita Flexbox */
+    align-items: flex-start; /* Allinea gli elementi verticalmente (in alto) */
+    /*Potresti anche usare 'center' per centrare verticalmente*/
+}
+
+.image-container {
+    flex: 0 0 auto; /* Non permettere all'immagine di crescere/restringersi */
+    margin-right: 20px; /* Aggiungi spazio tra immagine e testo */
+    width: 30%;
+}
+.text-container{
+    flex: 1;
+    text-align: left;
+}

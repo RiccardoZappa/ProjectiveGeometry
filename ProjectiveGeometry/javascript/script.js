@@ -231,49 +231,48 @@ function init() {
         addedMeshes.length = 0; // Clear the array
     }
 
-    function updateCamera() {
-        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
-        {
-            activeCamera.updateProjectionMatrix();
-            if(activeHelper)
-            {
-                activeHelper.update();
-            }
-        }
-    }
-
-    function updateFov()
-    {
-        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
-        {
-            activeCamera.fov = cameraPerspective.fov;
-        }
-        updateCamera();
-    }
-
-    function updateNear()
-    {
-        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
-        {
-            activeCamera.near = cameraPerspective.near;
-        }
-        updateCamera();
-    }
-
-    function updateFar()
-    {
-        if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
-        {
-            activeCamera.far = cameraPerspective.far;
-        }
-        updateCamera();
-    }
-
 	window.addEventListener( 'resize', onWindowResize );
 	document.addEventListener( 'keydown', onKeyDown );
 
 }
 
+function updateCamera() {
+    if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+    {
+        activeCamera.updateProjectionMatrix();
+        if(activeHelper)
+        {
+            activeHelper.update();
+        }
+    }
+}
+
+function updateFov()
+{
+    if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+    {
+        activeCamera.fov = cameraPerspective.fov;
+    }
+    updateCamera();
+}
+
+function updateNear()
+{
+    if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+    {
+        activeCamera.near = cameraPerspective.near;
+    }
+    updateCamera();
+}
+
+function updateFar()
+{
+    if (activeCamera === cameraPerspective || activeCamera === cameraOrtho)
+    {
+        activeCamera.far = cameraPerspective.far;
+    }
+    updateCamera();
+}
 //
 
 function onKeyDown( event ) {
@@ -293,36 +292,11 @@ function onKeyDown( event ) {
 			activeHelper = cameraPerspectiveHelper;
 
 			break;
-
-        // Add WASDQE controls:
-        case 87: // W: Forward
-            cameraRig.position.z -= moveDistance;
-            break;
-        case 83: // S: Backward
-            cameraRig.position.z += moveDistance;
-            break;
-        case 65: // A: Left
-            cameraRig.position.x -= moveDistance;
-            break;
-        case 68: // D: Right
-            cameraRig.position.x += moveDistance;
-            break;
-        case 81: // Q: Up
-            cameraRig.position.y += moveDistance;
-            break;
-        case 69: // E: Down
-            cameraRig.position.y -= moveDistance;
-            break;
-
 	}
     // Ensure that when camera changes the gui is updated
     updateFov();
     updateNear();
     updateFar();
-
-    params.cameraX = cameraRig.position.x;
-    params.cameraY = cameraRig.position.y;
-    params.cameraZ = cameraRig.position.z;
 
     if(gui) {
         for (var i in gui.__controllers) {
