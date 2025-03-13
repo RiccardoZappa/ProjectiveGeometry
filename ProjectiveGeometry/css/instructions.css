@@ -73,3 +73,16 @@ html{
     flex: 1;
     text-align: left;
 }
+
+   /* Responsive adjustments */
+   @media (max-width: 768px) {
+    .image-container {
+        width: 50%; /* Full width on small screens */
+        margin-right: 0; /* No margin on small screens */
+        margin-bottom: 1rem; /* Add bottom margin */
+        text-align: center;
+    }
+    .text-container div{
+       font-size: 30px;
+    }
+}
