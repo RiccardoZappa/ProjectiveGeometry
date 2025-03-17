@@ -1,72 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<title>instructions</title>
-        <link type="text/css" rel="stylesheet" href="css/instructions.css">
-        <div id="topnav">
-            <span id="topnav_span">
-              <a class="topnav_el" href="index.html">Home</a>
-              <a class="topnav_el" href="theory.html".html">Teoria</a>
-              <a class="topnav_el" href="project.html">Progetto</a>
-            </span>
-          </div>
-    </head>
-    <body>
-        <div class="center" style="text-align: center;">
-            <div style="font-size: 60px">Manuale Utente</div>
-        </div>
-        <br>
-        <div style="text-align: justify; margin:auto; width: 70%">
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manuale Utente</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/instructions.css">
+</head>
+<body>
+  <div id="topnav">
+    <span id="topnav_span">
+      <a class="topnav_el" href="index.html">Home</a>
+      <a class="topnav_el" href="theory.html">Teoria</a>
+      <a class="topnav_el" href="project.html">Applet</a>
+    </span>
+  </div>
+
+    <div class="container mt-4">  <h1 class = "text-center">Manuale Utente</h1>
+
+        <div class="card mb-4">
+            <div class="card-header">
+               Interfaccia Utente (GUI)
+            </div>
+           <div class="card-body">
             <div class="image-text-container">
                 <div class="image-container">
-                  <img src="assets/Projectcontrols.png" alt="User interface" width="300">
+                    <img src="assets/Projectcontrols.png" alt="Interfaccia Utente" class="img-fluid" width="200">
                 </div>
                 <div class="text-container">
-                  <div style="font-size: 40px;">
-                      GUI
-                  </div>
-                  In alto a destra e' posizionata la user interface per interagire con il progetto, le funzionalita' disponibili sono la creazione di nuovi oggetti da osservare e 
-                  il poter modificare parametri e posizione della camera.
-                </div>
-              </div>
-              <hr style="border-top: 2px solid #888; margin-top: 30px; margin-bottom: 30px;">
-            <div class="image-text-container">
-                <div class="image-container">
-                  <img src="assets/newObject.png" alt="Creazione di un nuovo oggetto" width="200">
-                </div>
-                <div class="text-container">
-                  <div style="font-size: 40px;">
-                      Creazione oggetti
-                  </div>
-                  Grazie al tasto 'add' si possono creare oggetti grazie alla UI in alto a destra: si possono specificare le dimensioni, il colore e la posizione nello spazio.
-                  Vengono forniti anche un tasto 'delete last' e 'delete all' per eliminare gli oggetti inseriti.
-                </div>
-              </div>
-              <hr style="border-top: 2px solid #888; margin-top: 30px; margin-bottom: 30px;">
-              <div class="image-text-container">
-                <div class="image-container">
-                  <img src="assets/CameraControls.png" alt="Creazione di un nuovo oggetto" width="200">
-                </div>
-                <div class="text-container">
-                  <div style="font-size: 40px;">
-                      Impostazioni e controlli Camera
-                  </div>
-                  Nella sezione Camera si possono modificare FOV, near plane e far plane, oltre a modificare la posizione lungo gli assi x, y e z.
-                </div>
-              </div>
-              <hr style="border-top: 2px solid #888; margin-top: 30px; margin-bottom: 30px;">
-              <div class="image-text-container">
-                <div class="image-container">
-                  <img src="assets/CameraChange.png" alt="Creazione di un nuovo oggetto" width="200">
-                </div>
-                <div class="text-container">
-                  <div style="font-size: 40px;">
-                      Cambio Camera
-                  </div>
-                  Con i tasti 'O' e 'P' possiamo passare da una camera all'altra.
+                    <p>
+                        L'interfaccia utente principale è posizionata in alto a destra della finestra.  Questa interfaccia, realizzata con la libreria <a href="https://github.com/dataarts/dat.gui" target="_blank">dat.GUI</a>, permette di controllare tutti gli aspetti interattivi dell'applicazione. È divisa in due sezioni principali: "New Object" e "Camera".
+                    </p>
                 </div>
             </div>
-            <hr style="border-top: 2px solid #888; margin-top: 30px; margin-bottom: 30px;">
+           </div>
         </div>
-    </body>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            Creazione Oggetti
+          </div>
+          <div class="card-body">
+            <div class="image-text-container">
+                <div class="image-container">
+                    <img src="assets/newObject.png" alt="Creazione di un nuovo oggetto" class="img-fluid" width="200">
+                </div>
+                <div class="text-container">
+
+                    <p>La sezione "New Object" consente di aggiungere nuovi oggetti 3D alla scena. Ecco come funziona:</p>
+                    <ol>
+                        <li><b>Type (Tipo):</b> Un menu a tendina permette di scegliere il tipo di oggetto da creare:
+                            <ul>
+                                <li><span class="inline-code">Sphere</span> (Sfera)</li>
+                                <li><span class="inline-code">Box</span> (Cubo)</li>
+                                <li> <span class = "inline-code">Capsule</span>(Capsula)</li>
+                            </ul>
+                        </li>
+                        <li><b>Size (Dimensioni):</b>  I controlli in questa sezione variano a seconda del tipo di oggetto selezionato:
+                            <ul>
+                                <li><b>Sphere:</b>
+                                    <ul>
+                                        <li><span class="inline-code">radius</span>: Controlla il raggio della sfera.</li>
+                                        <li><span class="inline-code">segments</span>: Controlla il numero di segmenti utilizzati per costruire la sfera (più segmenti = sfera più liscia, ma più pesante dal punto di vista computazionale).</li>
+                                    </ul>
+                                </li>
+                                <li><b>Box:</b>
+                                    <ul>
+                                        <li><span class="inline-code">width</span>: Larghezza del cubo.</li>
+                                        <li><span class="inline-code">height</span>: Altezza del cubo.</li>
+                                        <li><span class="inline-code">depth</span>: Profondità del cubo.</li>
+                                    </ul>
+                                </li>
+                                <li><b>Capsule:</b>
+                                     <ul>
+                                        <li><span class="inline-code">radius</span>: Controlla il raggio della capsula.</li>
+                                        <li><span class="inline-code">length</span>: Controlla la lunghezza della capsula.</li>
+                                       <li> <span class = "inline-code"> capSegments</span>: segmenti per la parte a cupola.</li>
+                                       <li> <span class = "inline-code"> radialSegments</span>: segmenti radiali.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><b>Position (Posizione):</b>
+                            <ul>
+                                <li><span class="inline-code">x</span>:  Controlla la posizione dell'oggetto lungo l'asse X.</li>
+                                <li><span class="inline-code">y</span>:  Controlla la posizione lungo l'asse Y.</li>
+                                <li><span class="inline-code">z</span>:  Controlla la posizione lungo l'asse Z.</li>
+                            </ul>
+                        </li>
+                        <li><b>Material</b>
+                          <ul>
+                            <li>
+                              <span class = "inline-code"> color </span>: Controlla il colore dell'oggetto.
+                            </li>
+                            <li>
+                              <span class = "inline-code"> texture </span>: Controlla la texture, selezionabile tra 'bricks' (mattoni) e 'none'.
+                            </li>
+                          </ul>
+                         <li><b>Add (Aggiungi):</b> Cliccando su questo pulsante, l'oggetto con le caratteristiche specificate viene aggiunto alla scena.</li>
+                        <li><b>Delete Last (Elimina Ultimo):</b> Rimuove l'ultimo oggetto aggiunto tramite la GUI.  Vengono rilasciate le risorse (geometria e materiale) per evitare memory leak.</li>
+                        <li><b>Delete All (Elimina Tutti):</b> Rimuove *tutti* gli oggetti aggiunti dinamicamente tramite la GUI.</li>
+                    </ol>
+
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+            Impostazioni e Controlli Camera
+            </div>
+              <div class="card-body">
+
+                <div class="image-text-container">
+                    <div class="image-container">
+                        <img src="assets/CameraControls.png" alt="Controlli Camera" class="img-fluid" width="200">
+                    </div>
+                    <div class="text-container">
+                        <p>La sezione "Camera" permette di controllare la camera attiva nella vista a sinistra (quella che mostra la scena 3D proiettata).  Ci sono due tipi di camera:  <code>PerspectiveCamera</code> (prospettica) e <code>OrthographicCamera</code> (ortografica).</p>
+
+                        <p><b>Controlli (solo per la camera attiva):</b></p>
+                        <ul>
+                            <li><span class="inline-code">FOV</span>:  Campo visivo (Field of View) della camera prospettica.  Un valore più alto crea un effetto "grandangolo", mentre un valore più basso crea un effetto "zoom".  Questo controllo *non* ha effetto sulla camera ortografica.</li>
+                            <li><span class="inline-code">Near</span>:  La distanza del piano di clipping vicino.  Gli oggetti più vicini di questo valore non vengono visualizzati.</li>
+                            <li><span class="inline-code">Far</span>:  La distanza del piano di clipping lontano.  Gli oggetti più lontani di questo valore non vengono visualizzati.</li>
+                            <li><span class="inline-code">Camera X</span>:  Sposta la camera lungo l'asse X.</li>
+                            <li><span class="inline-code">Camera Y</span>:  Sposta la camera lungo l'asse Y.</li>
+                            <li><span class="inline-code">Camera Z</span>:  Sposta la camera lungo l'asse Z.</li>
+                        </ul>
+
+                        <p><b>Controlli da Tastiera:</b></p>
+                        <p>Puoi anche controllare la posizione della *camera* (non dei singoli oggetti) usando i seguenti tasti:</p>
+                        <ul>
+                            <li><span class="inline-code">W</span>, <span class="inline-code">A</span>, <span class="inline-code">S</span>, <span class="inline-code">D</span>: Movimento orizzontale e verticale.</li>
+                            <li><span class="inline-code">Frecce direzionali</span>: Movimento orizzontale e verticale.</li>
+                            <li><span class = "inline-code"> Q</span>, <span class = "inline-code"> E</span>: Movimento verticale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header">
+            Cambio Camera
+          </div>
+          <div class="card-body">
+            <div class="image-text-container">
+                <div class="image-container">
+                    <img src="assets/CameraChange.png" alt="Cambio Camera" class="img-fluid" width="200">
+                </div>
+                <div class="text-container">
+                    <p>Puoi cambiare il tipo di proiezione usata nella vista a sinistra (la vista principale della scena) usando i tasti:</p>
+                    <ul>
+                        <li><span class="inline-code">O</span>:  Attiva la camera ortografica (`OrthographicCamera`).  Questa proiezione non ha effetto prospettico (gli oggetti mantengono le loro dimensioni indipendentemente dalla distanza).</li>
+                        <li><span class="inline-code">P</span>:  Attiva la camera prospettica (`PerspectiveCamera`).  Questa proiezione simula la visione umana, con gli oggetti lontani che appaiono più piccoli.</li>
+                    </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+ <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Riccardo Zappa 2025</p>
+        </div>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
