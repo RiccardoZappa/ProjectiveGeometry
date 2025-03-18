@@ -126,7 +126,7 @@
 			<div class="formula-block">
               $$
               K = \begin{bmatrix}
-                f_x & 0 & c_x \\
+                f_x & s & c_x \\
                 0 & f_y & c_y \\
                 0 & 0 & 1
               \end{bmatrix}
@@ -135,6 +135,7 @@
             <ul>
               <li><span class="inline-formula">f<sub class="sub">x</sub></span>, <span class="inline-formula">f<sub class="sub">y</sub></span>: Lunghezze focali in pixel (lungo gli assi u e v).  Sono legate al campo visivo (FOV).</li>
               <li><span class="inline-formula">c<sub class="sub">x</sub></span>, <span class="inline-formula">c<sub class="sub">y</sub></span>: Coordinate (in pixel) del *punto principale*, che è idealmente il centro dell'immagine.</li>
+              <li><span class="inline-formula">s: Skew o coefficiente di distorsione di taglio tra gli assi dell'immagine</li>
             </ul>
             <p><b>Matrice di Proiezione Completa (P):</b></p>
             <p>Combina parametri intrinseci ed estrinseci in un'unica matrice 3x4 (o 4x4 in forma omogenea):</p>
