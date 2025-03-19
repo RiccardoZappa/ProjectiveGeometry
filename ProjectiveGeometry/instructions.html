@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manuale Utente</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/instructions.css">
-</head>
+    <link rel="stylesheet" href="css/instructions.css">  </head>
 <body>
   <div id="topnav">
     <span id="topnav_span">
@@ -16,7 +15,8 @@
     </span>
   </div>
 
-    <div class="container mt-4">  <h1 class = "text-center">Manuale Utente</h1>
+    <div class="container mt-4">
+        <h1 class = "text-center">Manuale Utente</h1>
 
         <div class="card mb-4">
             <div class="card-header">
@@ -60,32 +60,32 @@
                             <ul>
                                 <li><b>Sphere:</b>
                                     <ul>
-                                        <li><span class="inline-code">radius</span>: Controlla il raggio della sfera.</li>
-                                        <li><span class="inline-code">segments</span>: Controlla il numero di segmenti utilizzati per costruire la sfera (più segmenti = sfera più liscia).</li>
+                                        <li><span class="inline-code">radius</span>: Controlla il raggio della sfera (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
+                                        <li><span class="inline-code">segments</span>: Controlla il numero di segmenti utilizzati per costruire la sfera (da <span class="inline-code">4</span> a <span class="inline-code">64</span>). Più segmenti rendono la sfera più liscia.</li>
                                     </ul>
                                 </li>
                                 <li><b>Box:</b>
                                     <ul>
-                                        <li><span class="inline-code">width</span>: Larghezza del cubo.</li>
-                                        <li><span class="inline-code">height</span>: Altezza del cubo.</li>
-                                        <li><span class="inline-code">depth</span>: Profondità del cubo.</li>
+                                        <li><span class="inline-code">width</span>: Larghezza del cubo (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
+                                        <li><span class="inline-code">height</span>: Altezza del cubo (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
+                                        <li><span class="inline-code">depth</span>: Profondità del cubo (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
                                     </ul>
                                 </li>
-                                <li><b>Capsule:</b>
+                                 <li><b>Capsule:</b>
                                      <ul>
-                                        <li><span class="inline-code">radius</span>: Controlla il raggio della capsula.</li>
-                                        <li><span class="inline-code">length</span>: Controlla la lunghezza della capsula.</li>
-                                       <li> <span class = "inline-code"> capSegments</span>: segmenti per la parte a cupola.</li>
-                                       <li> <span class = "inline-code"> radialSegments</span>: segmenti radiali.</li>
+                                        <li><span class="inline-code">radius</span>: Controlla il raggio della capsula (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
+                                        <li><span class="inline-code">length</span>: Controlla la lunghezza della capsula (da <span class="inline-code">1</span> a <span class="inline-code">200</span>).</li>
+                                       <li> <span class = "inline-code"> capSegments</span>: segmenti per la parte a cupola (da <span class = "inline-code">2</span> a <span class = "inline-code">32</span>).</li>
+                                       <li> <span class = "inline-code"> radialSegments</span>: segmenti radiali (da <span class = "inline-code">4</span> a <span class = "inline-code">64</span>).</li>
                                     </ul>
                                 </li>
                             </ul>
                         </li>
                         <li><b>Position (Posizione):</b>
                             <ul>
-                                <li><span class="inline-code">x</span>:  Controlla la posizione dell'oggetto lungo l'asse X.</li>
-                                <li><span class="inline-code">y</span>:  Controlla la posizione lungo l'asse Y.</li>
-                                <li><span class="inline-code">z</span>:  Controlla la posizione lungo l'asse Z.</li>
+                                <li><span class="inline-code">x</span>:  Controlla la posizione dell'oggetto lungo l'asse X (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
+                                <li><span class="inline-code">y</span>:  Controlla la posizione lungo l'asse Y (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
+                                <li><span class="inline-code">z</span>:  Controlla la posizione lungo l'asse Z (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
                             </ul>
                         </li>
                         <li><b>Material</b>
@@ -98,8 +98,8 @@
                             </li>
                           </ul>
                          <li><b>Add (Aggiungi):</b> Cliccando su questo pulsante, l'oggetto con le caratteristiche specificate viene aggiunto alla scena.</li>
-                        <li><b>Delete Last (Elimina Ultimo):</b> Rimuove l'ultimo oggetto aggiunto tramite la GUI.</li>
-                        <li><b>Delete All (Elimina Tutti):</b> Rimuove *tutti* gli oggetti aggiunti dinamicamente tramite la GUI.</li>
+                        <li><b>Delete Last (Elimina Ultimo):</b> Rimuove l'ultimo oggetto aggiunto.</li>
+                        <li><b>Delete All (Elimina Tutti):</b> Rimuove *tutti* gli oggetti aggiunti.</li>
                     </ol>
 
                 </div>
@@ -122,12 +122,14 @@
 
                         <p><b>Controlli (solo per la camera attiva):</b></p>
                         <ul>
-                            <li><span class="inline-code">FOV</span>:  Campo visivo (Field of View) della camera prospettica.  Un valore più alto crea un effetto "grandangolo", mentre un valore più basso crea un effetto "zoom".  Questo controllo *non* ha effetto sulla camera ortografica.</li>
-                            <li><span class="inline-code">Near</span>:  La distanza del piano di clipping vicino.  Gli oggetti più vicini di questo valore non vengono visualizzati.</li>
-                            <li><span class="inline-code">Far</span>:  La distanza del piano di clipping lontano.  Gli oggetti più lontani di questo valore non vengono visualizzati.</li>
-                            <li><span class="inline-code">Camera X</span>:  Sposta la camera lungo l'asse X.</li>
-                            <li><span class="inline-code">Camera Y</span>:  Sposta la camera lungo l'asse Y.</li>
-                            <li><span class="inline-code">Camera Z</span>:  Sposta la camera lungo l'asse Z.</li>
+                            <li><span class="inline-code">FOV</span>:  Campo visivo (Field of View) della camera prospettica (da <span class="inline-code">1</span> a <span class="inline-code">150</span>). Un valore più alto crea un effetto "grandangolo", mentre un valore più basso crea un effetto "zoom".  Questo controllo *non* ha effetto sulla camera ortografica.</li>
+                            <li><span class="inline-code">Near</span>:  La distanza del piano di clipping vicino (da <span class="inline-code">0.1</span> a <span class="inline-code">500</span>). Gli oggetti più vicini di questo valore non vengono visualizzati.</li>
+                            <li><span class="inline-code">Far</span>:  La distanza del piano di clipping lontano (da <span class="inline-code">1</span> a <span class="inline-code">5000</span>). Gli oggetti più lontani di questo valore non vengono visualizzati.</li>
+                            <li><span class="inline-code">Camera X</span>:  Sposta la camera lungo l'asse X (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
+                            <li><span class="inline-code">Camera Y</span>:  Sposta la camera lungo l'asse Y (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
+                            <li><span class="inline-code">Camera Z</span>:  Sposta la camera lungo l'asse Z (da <span class="inline-code">-1000</span> a <span class="inline-code">1000</span>).</li>
+
+                        </ul>
                         </ul>
                     </div>
                 </div>
